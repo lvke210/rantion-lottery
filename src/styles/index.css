@@ -1,0 +1,24 @@
+.flex{
+  display: flex;
+}
+.flex-sb{
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-center{
+  display: flex;
+  justify-content: center;
+}
+.arrow {
+  margin-top: 5px;
+}
+.padding{
+  padding: 2px 10px;
+}
+
+/* 滚动条不显示 */
+::-webkit-scrollbar {
+  width: 4px;
+  background-color:none !important;  
+   }
