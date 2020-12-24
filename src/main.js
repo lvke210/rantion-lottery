@@ -8,7 +8,6 @@ import Antd from "ant-design-vue";
 Vue.use(VueRouter);
 Vue.use(Antd);
 Vue.config.productionTip = false;
-
 new Vue({
     router,
     render: (h) => h(App),

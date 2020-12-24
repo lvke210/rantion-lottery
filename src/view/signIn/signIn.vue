@@ -73,7 +73,6 @@ import Vant from "vant";
 import "vant/lib/index.css";
 import { getDepartment, getCode, signIn } from "../../../api/index.js";
 Vue.use(Vant);
-
 export default {
     name: "signIn",
     data() {

@@ -38,6 +38,43 @@ export async function signIn(info) {
     };
     return await fetchData(xurl, requestOptions);
 }
+//员工信息
+export async function getSignList() {
+    const xurl = `${url}/api/lottery/employee?limit=1000&signed=1`;
+    let requestOptions = {
+        method: "get",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        redirect: "follow",
+    };
+    return await fetchData(xurl, requestOptions);
+}
+
+//奖项信息
+export async function getPrize() {
+    const xurl = `${url}/api/lottery/prize?`;
+    let requestOptions = {
+        method: "get",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        redirect: "follow",
+    };
+    return await fetchData(xurl, requestOptions);
+}
+//奖品信息
+export async function getGift() {
+    const xurl = `${url}/api/lottery/gift?`;
+    let requestOptions = {
+        method: "get",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        redirect: "follow",
+    };
+    return await fetchData(xurl, requestOptions);
+}
 
 async function fetchData(url, requestOptions) {
     return await fetch(url, requestOptions)
