@@ -40,7 +40,7 @@ export async function signIn(info) {
 }
 //员工信息
 export async function getSignList() {
-    const xurl = `${url}/api/lottery/employee?limit=1000&signed=1`;
+    const xurl = `${url}/api/lottery/employee?limit=1000`; //&signed=1   已签到的人
     let requestOptions = {
         method: "get",
         headers: {
@@ -64,10 +64,30 @@ export async function getPrize() {
     return await fetchData(xurl, requestOptions);
 }
 //奖品信息
-export async function getGift() {
-    const xurl = `${url}/api/lottery/gift?`;
+export async function getGift(id) {
+    const xurl = `${url}/api/lottery/gift?id=${id}`;
+
     let requestOptions = {
         method: "get",
+
+        headers: {
+            "Content-Type": "application/json",
+        },
+        redirect: "follow",
+    };
+    return await fetchData(xurl, requestOptions);
+}
+
+//抽奖
+export async function giftRoll(gift_id, limit) {
+    const xurl = `${url}/api/lottery/giftRoll?`;
+    const raw = {
+        gift_id,
+        limit,
+    };
+    let requestOptions = {
+        method: "Post",
+        body: JSON.stringify(raw),
         headers: {
             "Content-Type": "application/json",
         },

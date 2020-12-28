@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 没抽过的奖 -->
-    <div v-if="!this.successful">
+    <div v-show="!this.successful">
       <div class="flex-sb head">
         <div>参与人数：{{this.list.length}}</div>
         <div>参与名单</div>
@@ -46,7 +46,7 @@
       </div>
     </div>
     <!-- 已抽过的奖 -->
-    <div v-if="this.successful">
+    <div v-show="this.successful">
       <div class="flex-sb head">
         <div>参与人数：{{this.list.length}}</div>
         <div>获奖名单</div>
@@ -59,7 +59,6 @@
           class="item"
         >
           <a-avatar
-            :size='default_url'
             shape="square"
             icon="user"
             :src='item.avatar !=="" ? item.avatar:default_url'
@@ -79,26 +78,27 @@ require("./tagCanvas");
 import bus from "../../../assets/js/eventBus";
 import { setTimeout } from "timers";
 
-import { getSignList } from "../../../../api/index.js";
+import { getSignList, getGift } from "../../../../api/index.js";
 export default {
     name: "UserList",
     props: {
         count: Number,
+        not_winners: Number,
+        giftId: Number,
+        list2: Array,
+        successful: Boolean,
     },
     data: function() {
         return {
             default_url: "https://picsum.photos/200",
-            showCard: false,
-            successful: false,
+
             timer: "",
-            rewordCount: 1,
-            list: [],
-            list2: [],
+            rewordCount: 1, //获奖人数
+            list: [], //参与成员列表
         };
     },
     methods: {
-        //开始抽奖并展示
-
+        //转动的效果
         startGame() {
             // window.TagCanvas.Start("myCanvas");
             setTimeout(() => {
@@ -115,57 +115,40 @@ export default {
                 }, 500);
             }, 500);
         },
-
-        stopGame() {
-            console.log(111);
-
-            const _this = this;
-            const radamNumber = this.winner(); //取随机数抽人
-            window.TagCanvas.TagToFront("myCanvas", {
-                index: radamNumber,
-                time: 0,
-                callback() {
-                    setTimeout(() => {
-                        _this.list2.push(_this.list[radamNumber]);
-                        _this.successful = !_this.successful;
-                    }, 0);
-                },
-            });
+        // 中奖成员
+        async getWinner() {
+            console.log("奖品id", this.giftId);
+            const { data } = await getGift(this.giftId);
+            console.log(data.gift_records);
         },
+        // 可以抽奖时就加载列表
+        async loadGame() {
+            const { data } = await getSignList();
+            this.list = data.data;
 
-        // clearInfo() {},
-        //获得参与人数中的一个随机整数
-        winner(array = this.list, start = 1, end) {
-            end = end ? end : array.length;
-            start--;
-            const index = start + Math.floor(Math.random() * (end - start));
-            // this.list2.push(array[index]);
-            // return array[index];
-            return index;
+            window.TagCanvas.textColour = "#000";
+            window.TagCanvas.minSpeed = 0.05;
+            // window.TagCanvas.maxSpeed = 0.01;
+            window.TagCanvas.imageMode = "both"; //图片和文字
+            window.TagCanvas.imagePosition = "top"; //图片位置
+            window.TagCanvas.textHeight = "5"; //字体高度
+            window.TagCanvas.splitWidth = "1"; //换行
+            // window.TagCanvas.clickToFront = "3";
+            window.TagCanvas.imageRadius = "20%";
+            window.TagCanvas.zoom = 1.2; //大小
+            window.TagCanvas.dragControl = true; //鼠标拖动旋转
+            window.TagCanvas.noSelect = true; //是否可以选中某一项
+            window.TagCanvas.initial = [0.1, 0.1]; //初始方向和速度
+            await window.TagCanvas.Start("myCanvas");
+            window.TagCanvas.Update("myCanvas");
         },
     },
-    async mounted() {
-        const { data } = await getSignList();
-        this.list = data.data;
+    mounted() {
+        //中奖人数
         bus.$on("sendByBus", (count) => {
             this.rewordCount = count;
         });
-        // this.winner();
-        window.TagCanvas.textColour = "#000";
-        window.TagCanvas.minSpeed = 0.05;
-        // window.TagCanvas.maxSpeed = 0.01;
-        window.TagCanvas.imageMode = "both"; //图片和文字
-        window.TagCanvas.imagePosition = "top"; //图片位置
-        window.TagCanvas.textHeight = "5"; //字体高度
-        window.TagCanvas.splitWidth = "1"; //换行
-        // window.TagCanvas.clickToFront = "3";
-        window.TagCanvas.imageRadius = "20%";
-        window.TagCanvas.zoom = 1.2; //大小
-        window.TagCanvas.dragControl = true; //鼠标拖动旋转
-        window.TagCanvas.noSelect = true; //是否可以选中某一项
-        window.TagCanvas.initial = [0.1, 0.1]; //初始方向和速度
-        await window.TagCanvas.Start("myCanvas");
-        window.TagCanvas.Update("myCanvas");
+
         // this.$nextTick(() => {
         //     this.$refs.main.scrollTop = this.$refs.content.scrollHeight;
         // });

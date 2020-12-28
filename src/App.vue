@@ -16,7 +16,10 @@ export default {
 <style>
 #app {
     height: 100%;
-    padding: 50px;
+    padding: 30px;
     user-select: none;
+    background-image: url("./assets/bgc.jpg");
+    background-size: cover;
+    overflow-x: auto;
 }
 </style>

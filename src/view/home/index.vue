@@ -7,7 +7,7 @@
       <a-card style="max-height:93vh">
         <a-space
           direction="vertical"
-          :size='size'
+          :size='50'
           class="center"
         >
 
@@ -64,6 +64,7 @@
           <a-button
             type='primary'
             @click="lotteryStop"
+            :disabled='disabled'
           >停止</a-button>
           <div>剩余奖品数量{{not_winners}}</div>
         </a-space>
@@ -71,7 +72,13 @@
     </div>
     <div class="right">
       <a-card style="min-height:90vh">
-        <UserList ref="UserList" />
+        <UserList
+          ref="UserList"
+          :not_winners='not_winners'
+          :successful='successful'
+          :list2='list2'
+          :giftId='giftId'
+        />
       </a-card>
     </div>
 
@@ -87,7 +94,8 @@
 import Quantity from "./components/quantity";
 import UserList from "./components/userList";
 import { getPrize } from "../../../api";
-
+import { giftRoll } from "../../../api/index.js";
+import bus from "../../assets/js/eventBus";
 // require("./components/tagCanvas.js");
 
 export default {
@@ -96,47 +104,79 @@ export default {
     data: function() {
         return {
             successful: false,
-            size: 50,
+            disabled: false,
+
             prizeData: [], //奖项列表
             gift: [], //奖品列表
+            curGift: "",
             defaultPrize: "", //默认奖项
             defaultGift: "", //默认奖品
             gift_url: "", //奖品图片
             prizeId: 1, // 奖项的ID ，用于
+            giftId: 1, //奖品的ID
             not_winners: 0, //剩余奖品数量
+            list: [], //参与成员列表
+            list2: [], //中奖名单列表
+            rewordCount: 1,
         };
     },
     async mounted() {
-        const { data } = await getPrize();
+        const { data } = await getPrize(); //获取奖项
         this.prizeData = data;
-        this.defaultPrize = this.prizeData[0].id;
+        this.defaultPrize = this.prizeData[0].id; //初始页面默认特等奖 奖品 图片
         this.defaultGift = this.prizeData[0].gifts[0].name;
         this.gift_url = this.prizeData[0].gifts[0].images;
-        this.gift = this.prizeData[0].gifts;
-        this.not_winners = this.prizeData[0].gifts[0].not_winners;
+        this.gift = this.prizeData[0].gifts; //奖品列表
+        this.curGift = this.gift[0]; //初始奖品
+        this.giftId = this.curGift.id;
+        this.not_winners = this.curGift.not_winners; //剩余奖品数量
+        this.showWinner();
+        bus.$on("sendByBus", (count) => {
+            this.rewordCount = count;
+        });
     },
 
     methods: {
+        showWinner() {
+            if (this.curGift.status == 1) {
+                this.successful = false;
+                this.disabled = false;
+                this.$refs.UserList.loadGame(); ////更换奖品时重新请求参与者名单
+                console.log("可以抽奖");
+            } else {
+                console.log("奖品抽完了");
+                this.successful = true;
+                this.disabled = true;
+                this.$nextTick(() => {
+                    this.$refs.UserList.getWinner();
+                });
+            }
+        },
         handleprizeChange(value) {
             this.prizeId = value;
             this.defaultPrize = value;
             this.gift = this.prizeData[value - 1].gifts;
+            this.curGift = this.prizeData[value - 1].gifts[0];
             this.defaultGift = this.prizeData[value - 1].gifts[0].name;
+            this.giftId = this.prizeData[value - 1].gifts[0].id;
             this.gift_url = this.prizeData[value - 1].gifts[0].images;
             this.not_winners = this.prizeData[value - 1].gifts[0].not_winners;
+            this.showWinner();
         },
         handlegiftChange(value) {
             this.defaultGift = value;
-            const gifts = this.prizeData
+            this.giftId = value;
+            console.log("奖品ID", this.giftId);
+            this.curGift = this.prizeData //筛选出对应奖品
                 .filter((val) => {
-                    return val.id == this.prizeId;
+                    return val.id == this.prizeId; //先找到对应奖项
                 })[0]
                 .gifts.filter((val) => {
-                    return val.id == value;
+                    return val.id == value; //再找到对应奖品
                 })[0];
-            this.gift_url = gifts.images;
-            this.not_winners = gifts.not_winners;
-
+            this.gift_url = this.curGift.images;
+            this.not_winners = this.curGift.not_winners;
+            this.showWinner();
             // .gifts.filter((val) => {
             //     return val.id === value;
             // }).images;
@@ -152,14 +192,25 @@ export default {
             // this.successful = !this.successful;
             // this.disabled = true;
         },
-        lotteryStop() {
-            this.$refs.UserList.stopGame();
+        async lotteryStop() {
+            this.not_winners = this.not_winners - this.rewordCount; //剩余中奖人数
+            const { data } = await giftRoll(this.curGift.id, this.rewordCount);
+            this.list2 = data;
+            console.log("this.list2", this.list2);
+            this.successful = true;
+
+            if (this.not_winners === 0) {
+                this.disabled = true;
+            }
         },
     },
 };
 </script>
 
 <style >
+.wrap {
+    opacity: 0.9;
+}
 .left {
     width: 20%;
     text-align: center;
