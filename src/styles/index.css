@@ -23,3 +23,7 @@
   width: 4px;
   background-color:none !important;  
    }
+
+   .ant-card-body{
+     width: 100%;
+   }

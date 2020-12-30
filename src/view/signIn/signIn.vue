@@ -1,4 +1,5 @@
 <template>
+
   <van-cell-group class="wrap">
     <van-image :src="require('../../assets/rantion.png')" />
     <div class="content">
@@ -57,13 +58,16 @@
 
     </div>
     <van-button
+      class="btn"
       round
       block
       type="info"
       native-type="submit"
       @click="submi"
+      icon-position='right'
     >签到</van-button>
   </van-cell-group>
+
 </template>
 
 <script>
@@ -168,10 +172,11 @@ export default {
 };
 </script>
 
-<style >
+<style scoped>
 .wrap {
     text-align: center;
     margin-top: 30%;
+    padding: 50px;
 }
 .content {
     margin: 50px 0;
