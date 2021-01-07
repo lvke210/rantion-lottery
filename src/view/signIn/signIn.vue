@@ -75,8 +75,9 @@ require("./wechat.js");
 import Vue from "vue";
 import Vant from "vant";
 import "vant/lib/index.css";
-import { getDepartment, getCode, signIn } from "../../../api/index.js";
+import { getDepartment, getCode, giftUserInfo } from "../../api/index.js";
 Vue.use(Vant);
+
 export default {
     name: "signIn",
     data() {
@@ -103,11 +104,13 @@ export default {
             this.$set(this.info, "dept_code", value.id);
             this.showPicker = false;
         },
-
+        async getUser() {
+            const { data } = await giftUserInfo();
+            console.log(data);
+        },
         async sendCode() {
             const count = 3;
             let curCount = count;
-
             const phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
 
             if (!phoneReg.test(this.info.phone)) {
@@ -116,6 +119,19 @@ export default {
                 });
                 return false;
             } else {
+                this.wx.request({
+                    url: "test.php", //仅为示例，并非真实的接口地址
+                    data: {
+                        x: "",
+                        y: "",
+                    },
+                    header: {
+                        "content-type": "application/json", // 默认值
+                    },
+                    success(res) {
+                        console.log(res.data);
+                    },
+                });
                 const { data, msg, code } = await getCode(this.info.phone);
                 this.$toast({
                     message: msg,
@@ -148,24 +164,38 @@ export default {
                     message: "请输入信息",
                 });
             } else {
-                const { data, code, msg } = await signIn(this.info);
-                if (data) {
-                    this.$toast({
-                        message: "已经签过到啦",
-                    });
-                } else {
-                    code == 0
-                        ? this.$toast({
-                              message: "签到成功",
-                          })
-                        : this.$toast({
-                              message: msg,
-                          });
-                }
+                const requestOptions = {
+                    method: "POST",
+                    body: JSON.stringify(this.info),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    redirect: "follow",
+                };
+                fetch("http://47.107.254.110:28088//api/lottery/signIn", requestOptions)
+                    .then((response) => response.json())
+                    .then((result) => console.log(result, 111))
+                    .catch((error) => console.log("error", error));
+
+                // const { data, code, msg } = await signIn(this.info);
+                // if (data) {
+                //     this.$toast({
+                //         message: "已经签过到啦",
+                //     });
+                // } else {
+                //     code == 0
+                //         ? this.$toast({
+                //               message: "签到成功",
+                //           })
+                //         : this.$toast({
+                //               message: msg,
+                //           });
+                // }
             }
         },
     },
     async mounted() {
+        // this.getUser();
         const { data } = await getDepartment();
         this.columns = data;
     },

@@ -14,4 +14,7 @@ export default {
 </script>
 
 <style>
+#app {
+    font-weight: 700;
+}
 </style>

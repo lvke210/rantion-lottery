@@ -40,7 +40,7 @@ export async function signIn(info) {
 }
 //员工信息
 export async function getSignList() {
-    const xurl = `${url}/api/lottery/employee?limit=1000&signed=1`; //&signed=1   已签到的人
+    const xurl = `${url}/api/lottery/employee?limit=1000`; //&signed=1   已签到的人
     let requestOptions = {
         method: "get",
         headers: {
@@ -88,6 +88,18 @@ export async function giftRoll(gift_id, limit) {
     let requestOptions = {
         method: "Post",
         body: JSON.stringify(raw),
+        headers: {
+            "Content-Type": "application/json",
+        },
+        redirect: "follow",
+    };
+    return await fetchData(xurl, requestOptions);
+}
+//用户信息
+export async function giftUserInfo() {
+    const xurl = `${url}/api/wechat/userInfo?code=051Kq6100jUISK1HRi000OVPdO3Kq61t`;
+    let requestOptions = {
+        method: "Post",
         headers: {
             "Content-Type": "application/json",
         },
