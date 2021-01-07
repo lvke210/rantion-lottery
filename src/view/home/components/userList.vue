@@ -4,7 +4,7 @@
     <div v-show="!this.successful">
       <div class="flex-sb head custom-head">
         <div>参与人数：{{this.list.length}}</div>
-        <div>参与名单</div>
+        <div @click="reFreshUser">参与名单</div>
         <div>已获奖人数:{{winners}}人</div>
       </div>
       <div
@@ -81,7 +81,7 @@
 <script>
 require("./tagCanvas");
 // import bus from "../../../assets/js/eventBus";
-import { setTimeout } from "timers";
+import { setTimeout, setInterval } from "timers";
 // import * as R from "ramda";
 
 import { getSignList, getGift } from "../../../api/index.js";
@@ -113,6 +113,7 @@ export default {
             rewordCount: 0, //获奖人数
             list: [], //参与成员列表
             x: this.list2,
+            timer1: "",
         };
     },
     methods: {
@@ -144,13 +145,17 @@ export default {
         orSpeed() {
             window.TagCanvas.SetSpeed("myCanvas", [0.02, 0.02]);
         },
-        // async reFreshList() {
-        //     const timer = setInterval(() => {
-        //         const { data } = getSignList();
-        //         this.list = data.data;
-        //         window.TagCanvas.Update("myCanvas");
-        //     }, 1000);
-        // },
+        //轮询已签到人数，参与人数实时变动
+        reFreshUser() {
+            setInterval(async () => {
+                const { data } = await getSignList();
+                this.list = data.data;
+            }, 2000);
+            //更新展示参与人员的列表 更新时会有卡顿
+            // setInterval(() => {
+            //     window.TagCanvas.Update("myCanvas");
+            // }, 20000);
+        },
     },
     async mounted() {
         const { data } = await getSignList();
@@ -170,6 +175,7 @@ export default {
         window.TagCanvas.initial = [0.02, 0.02]; //初始方向和速度
         await window.TagCanvas.Start("myCanvas");
         window.TagCanvas.Update("myCanvas");
+        this.reFreshUser();
     },
 };
 </script>
@@ -195,7 +201,7 @@ export default {
 }
 .win {
     flex-wrap: wrap;
-    width: 75%;
+    width: 87%;
     margin: auto;
     color: #fff;
 }

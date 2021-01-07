@@ -5,7 +5,7 @@
       class="arrow"
       @click='reduce'
     />
-    <div class="padding">抽{{count}}人</div>
+    <div class="padding">{{count}}人</div>
     <a-icon
       type="plus-circle"
       class="arrow"

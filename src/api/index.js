@@ -40,7 +40,7 @@ export async function signIn(info) {
 }
 //员工信息
 export async function getSignList() {
-    const xurl = `${url}/api/lottery/employee?limit=1000`; //&signed=1   已签到的人
+    const xurl = `${url}/api/lottery/employee?limit=1000&signed=1`; //&signed=1   已签到的人
     let requestOptions = {
         method: "get",
         headers: {

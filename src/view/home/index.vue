@@ -297,7 +297,7 @@ export default {
 }
 /* 下拉item的样式 */
 .ant-select-dropdown-placement-bottomLeft {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 1);
 }
 
 .ant-select {
