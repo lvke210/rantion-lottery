@@ -4,7 +4,7 @@
     <div v-show="!this.successful">
       <div class="flex-sb head custom-head">
         <div>参与人数：{{this.list.length}}</div>
-        <div @click="reFreshUser">参与名单</div>
+        <div @click="reFreshList">参与名单</div>
         <div>已获奖人数:{{winners}}人</div>
       </div>
       <div
@@ -145,21 +145,25 @@ export default {
         orSpeed() {
             window.TagCanvas.SetSpeed("myCanvas", [0.02, 0.02]);
         },
-        //轮询已签到人数，参与人数实时变动
+        //轮询已签列表，参与人数实时变动
         reFreshUser() {
             setInterval(async () => {
                 const { data } = await getSignList();
                 this.list = data.data;
-            }, 2000);
-            //更新展示参与人员的列表 更新时会有卡顿
-            // setInterval(() => {
-            //     window.TagCanvas.Update("myCanvas");
-            // }, 20000);
+            }, 20000);
+        },
+        //更新展示参与人员的列表 更新时会有卡顿
+        // setInterval(() => {
+        //     window.TagCanvas.Update("myCanvas");
+        // }, 20000);
+        reFreshList() {
+            window.TagCanvas.Update("myCanvas");
         },
     },
     async mounted() {
         const { data } = await getSignList();
         this.list = data.data;
+        console.log(this.list);
         window.TagCanvas.textColour = "#fff";
         window.TagCanvas.minSpeed = 0.05;
         // window.TagCanvas.maxSpeed = 0.01;
@@ -169,7 +173,9 @@ export default {
         window.TagCanvas.splitWidth = "1"; //换行
         // window.TagCanvas.clickToFront = "3";
         window.TagCanvas.imageRadius = "20%";
-        window.TagCanvas.zoom = 1.5; //大小
+        window.TagCanvas.zoom = 1.2; //大小
+        window.TagCanvas.maxBrightness = 1; //前端亮度
+        window.TagCanvas.minBrightness = 1; //后端亮度
         window.TagCanvas.dragControl = true; //鼠标拖动旋转
         window.TagCanvas.noSelect = true; //是否可以选中某一项
         window.TagCanvas.initial = [0.02, 0.02]; //初始方向和速度

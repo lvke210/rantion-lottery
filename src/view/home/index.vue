@@ -5,9 +5,13 @@
       <a-card style="height:93vh">
         <a-space
           direction="vertical"
-          :size='50'
+          :size='30'
           class="center"
         >
+          <div><img
+              src="../../assets/logo2.png"
+              alt=""
+            ></div>
           <div>
             <div class="title">年会抽奖</div>
           </div>
@@ -29,6 +33,12 @@
                 </a-select-option>
               </a-select>
             </div>
+            <!-- 奖品图片预览 -->
+            <img
+              class="img"
+              :src="gift_url"
+              alt="奖品图片"
+            >
             <!-- 奖品 -->
             <div>
               <a-select
@@ -45,12 +55,6 @@
                 </a-select-option>
               </a-select>
             </div>
-            <!-- 奖品图片预览 -->
-            <img
-              class="img"
-              :src="gift_url"
-              alt="奖品图片"
-            >
 
           </div>
           <Quantity :not_winners='not_winners' />
@@ -265,8 +269,7 @@ export default {
     width: 140px;
     height: 47px;
     font-size: 22px;
-    background-color: #512b5e;
-    border-color: #512b5e;
+    background-image: url("../../assets/btn.png");
 }
 .right {
     flex: 1;
@@ -275,7 +278,7 @@ export default {
 .ant-card,
 .ant-card-bordered {
     /* background-color: rgb(19 19 20); */
-    background-color: rgba(77, 20, 92, 0.5);
+    background-color: rgba(77, 20, 92, 0);
 }
 .center {
     margin: 80px 0;
@@ -310,5 +313,9 @@ export default {
 .ant-select-dropdown-menu-item-selected {
     text-align: center;
     margin-left: -12px;
+}
+.ant-select-selection--single .ant-select-selection__rendered {
+    margin-right: 10px;
+    margin-top: 20px;
 }
 </style>
