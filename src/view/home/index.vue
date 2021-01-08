@@ -6,8 +6,10 @@
         <a-space
           direction="vertical"
           :size='30'
-          class="center"
+          :class="center.value"
         >
+          <!-- :class="`${this.$refs.UserList.canvasWidth>2000? '':'center'}`" -->
+
           <div><img
               src="../../assets/logo2.png"
               alt=""
@@ -55,7 +57,6 @@
                 </a-select-option>
               </a-select>
             </div>
-
           </div>
           <Quantity :not_winners='not_winners' />
           <a-button
@@ -83,12 +84,11 @@
           :list2='list2'
           :giftId='giftId'
           :winners='winners'
+          :center='center'
         />
       </a-card>
     </div>
-
   </div>
-
 </template>
 
 <script>
@@ -96,16 +96,14 @@
 // import Prize from "./components/prize";
 import Quantity from "./components/quantity";
 import UserList from "./components/userList";
-
 import { giftRoll, getGift, getPrize } from "../../api/index.js";
 import bus from "../../assets/js/eventBus";
-
 export default {
     name: "Home",
     components: { Quantity, UserList },
-
     data: function() {
         return {
+            center: { value: "center" },
             btnInnerText: "开始", //按钮显示内容
             successful: false,
             disabled: false,
@@ -122,13 +120,13 @@ export default {
             list2: [], //中奖名单列表
             rewordCount: 1,
             winners: 0,
+            canvasWidth: "",
         };
     },
     async mounted() {
         document.addEventListener("keyup", (e) => {
             e.preventDefault();
-            if (e.keyCode == 32) {
-                console.log("按了空格");
+            if (e.keyCode == 32 || e.keyCode == 13) {
                 this.lotteryStartStop();
             }
         });
@@ -173,13 +171,11 @@ export default {
             });
             this.prizeId = value;
             this.defaultPrize = value;
-
             this.gift = this.prizeData[value - 1].gifts;
             this.defaultGift = this.gift[0].name;
             this.giftId = this.gift[0].id;
             const { data } = await getGift(this.giftId);
             this.list2 = data.gift_records;
-
             this.curGift = data;
             this.gift_url = this.curGift.images;
             this.not_winners = this.curGift.not_winners;
@@ -203,17 +199,14 @@ export default {
         lotteryStartStop() {
             if (this.btnInnerText == "开始") {
                 this.lotteryStart();
-
                 console.log("====> 开始");
             } else {
                 this.lotteryStop();
-
                 console.log("====> 停止");
             }
         },
         async lotteryStart() {
             //开始按钮 只有加速效果
-
             if (this.not_winners < this.rewordCount) {
                 this.$message.info("剩余奖品数量不足");
                 return false;
@@ -234,7 +227,6 @@ export default {
                 this.disabled = true;
             }
             this.successful = true;
-
             this.winners = data.winners;
         },
     },
@@ -255,6 +247,12 @@ export default {
 .title {
     font-size: 50px;
     color: #fff;
+}
+.center {
+    margin-top: 50px;
+}
+.center2 {
+    margin-top: 50px;
 }
 .left {
     width: 20%;

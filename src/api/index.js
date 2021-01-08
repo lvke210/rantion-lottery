@@ -112,7 +112,6 @@ async function fetchData(url, requestOptions) {
     return await fetch(url, requestOptions)
         .then((response) => response.json())
         .then((result) => {
-            // this.columns = result.data;
             return result;
         })
         .catch((error) => console.log("error", error));

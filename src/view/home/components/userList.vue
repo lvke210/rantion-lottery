@@ -17,7 +17,7 @@
         >
           <div id="myCanvasContainer">
             <canvas
-              width="1400"
+              :width="canvasWidth"
               height="900"
               id="myCanvas"
               class='canvas'
@@ -95,11 +95,11 @@ export default {
         list2: Array,
         successful: Boolean,
         winners: Number,
+        center: Object,
     },
     watch: {
         list2: function(newVal, oldVal) {
-            console.log("newVal", newVal);
-            console.log("oldVal", oldVal);
+            //只显示本轮中间的人
             this.x = R.difference(newVal, oldVal);
             // this.historyPrize = oldVal;
             // this.x = newVal;
@@ -107,13 +107,14 @@ export default {
     },
     data: function() {
         return {
-            default_url: "https://picsum.photos/200",
+            default_url: "https://i.loli.net/2021/01/08/fgI9vPKmwunqJF3.png",
             historyPrize: [],
             timer: "",
             rewordCount: 0, //获奖人数
             list: [], //参与成员列表
             x: this.list2,
             timer1: "",
+            canvasWidth: "", //屏幕宽度
         };
     },
     methods: {
@@ -138,7 +139,6 @@ export default {
 
         // 中奖成员
         async getWinner() {
-            console.log("奖品id", this.giftId);
             const { data } = await getGift(this.giftId);
             this.x = data.gift_records;
         },
@@ -150,6 +150,7 @@ export default {
             setInterval(async () => {
                 const { data } = await getSignList();
                 this.list = data.data;
+                this.canvasWidthChange();
             }, 4000);
         },
         //更新展示参与人员的列表 更新时会有卡顿
@@ -159,8 +160,15 @@ export default {
         reFreshList() {
             window.TagCanvas.Update("myCanvas");
         },
+        canvasWidthChange() {
+            let clientWidth = document.body.clientWidth; //屏幕宽度变化的话  展示的参与列表球体也变化
+            clientWidth > 2000
+                ? ((this.canvasWidth = 3000), this.$set(this.center, "value", ""))
+                : ((this.canvasWidth = 1400), this.$set(this.center, "value", "center"));
+        },
     },
     async mounted() {
+        this.canvasWidthChange();
         const { data } = await getSignList();
         this.list = data.data;
         window.TagCanvas.textColour = "#fff";
@@ -207,7 +215,8 @@ export default {
 }
 .win {
     flex-wrap: wrap;
-    margin: auto;
+    /* margin: auto; */
+    margin-top: 30px;
     color: #fff;
 }
 .item {
@@ -221,9 +230,7 @@ export default {
     /* 电脑屏幕 */
     width: 100%;
     /* 大屏幕宽屏 */
-    /* width: 60%;
-    height: 100%;
-    margin: 30px auto; */
+    /* margin: 30px auto; */
 }
 .canvas {
     width: 100%;
