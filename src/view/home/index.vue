@@ -178,6 +178,8 @@ export default {
             this.defaultGift = this.gift[0].name;
             this.giftId = this.gift[0].id;
             const { data } = await getGift(this.giftId);
+            this.list2 = data.gift_records;
+
             this.curGift = data;
             this.gift_url = this.curGift.images;
             this.not_winners = this.curGift.not_winners;
@@ -191,6 +193,7 @@ export default {
             this.defaultGift = value;
             this.giftId = value;
             const { data } = await getGift(this.giftId);
+            this.list2 = data.gift_records;
             this.curGift = data;
             this.gift_url = this.curGift.images;
             this.not_winners = this.curGift.not_winners;
@@ -232,7 +235,7 @@ export default {
             }
             this.successful = true;
 
-            this.winners++;
+            this.winners = data.winners;
         },
     },
 };
@@ -246,6 +249,7 @@ export default {
     /* background-image: url("./assets/bgc.jpg"); */
     background-image: url("../../assets/bgc.png");
     background-size: cover;
+    background-position: center;
     overflow-x: auto;
 }
 .title {
@@ -280,9 +284,7 @@ export default {
     /* background-color: rgb(19 19 20); */
     background-color: rgba(77, 20, 92, 0);
 }
-.center {
-    margin: 80px 0;
-}
+
 .img {
     width: 50%;
     display: inline-block;

@@ -50,7 +50,7 @@
       <div class="flex-sb head custom-head">
         <div>参与人数：{{this.list.length}}</div>
         <div>获奖名单</div>
-        <div>已获奖人数:{{this.x.length}}人</div>
+        <div>本轮获奖人数:{{this.x.length}}人</div>
       </div>
       <div class="flex-center win">
 
@@ -63,7 +63,7 @@
               :src='item.employee.avatar !=="" ? item.employee.avatar:default_url'
               shape="square"
               icon="user"
-              width="60px"
+              width="150px"
               borderRadius='10px'
             />
           </a>
@@ -82,7 +82,7 @@
 require("./tagCanvas");
 // import bus from "../../../assets/js/eventBus";
 import { setTimeout, setInterval } from "timers";
-// import * as R from "ramda";
+import * as R from "ramda";
 
 import { getSignList, getGift } from "../../../api/index.js";
 
@@ -100,9 +100,9 @@ export default {
         list2: function(newVal, oldVal) {
             console.log("newVal", newVal);
             console.log("oldVal", oldVal);
-            // this.x = R.difference(newVal, oldVal);
+            this.x = R.difference(newVal, oldVal);
             // this.historyPrize = oldVal;
-            this.x = newVal;
+            // this.x = newVal;
         },
     },
     data: function() {
@@ -150,7 +150,7 @@ export default {
             setInterval(async () => {
                 const { data } = await getSignList();
                 this.list = data.data;
-            }, 20000);
+            }, 4000);
         },
         //更新展示参与人员的列表 更新时会有卡顿
         // setInterval(() => {
@@ -163,7 +163,6 @@ export default {
     async mounted() {
         const { data } = await getSignList();
         this.list = data.data;
-        console.log(this.list);
         window.TagCanvas.textColour = "#fff";
         window.TagCanvas.minSpeed = 0.05;
         // window.TagCanvas.maxSpeed = 0.01;
@@ -203,11 +202,11 @@ export default {
 }
 .list2 {
     flex-wrap: wrap;
+    height: 100%;
     width: 100%;
 }
 .win {
     flex-wrap: wrap;
-    width: 87%;
     margin: auto;
     color: #fff;
 }
@@ -219,7 +218,12 @@ export default {
     white-space: nowrap;
 }
 #myCanvasContainer {
+    /* 电脑屏幕 */
     width: 100%;
+    /* 大屏幕宽屏 */
+    /* width: 60%;
+    height: 100%;
+    margin: 30px auto; */
 }
 .canvas {
     width: 100%;
