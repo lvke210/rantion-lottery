@@ -174,7 +174,7 @@ export default {
         window.TagCanvas.textColour = "#fff";
         window.TagCanvas.minSpeed = 0.05;
         // window.TagCanvas.maxSpeed = 0.01;
-        window.TagCanvas.imageMode = "both"; //图片和文字
+        window.TagCanvas.imageMode = "both"; //图片和文字1
         window.TagCanvas.imagePosition = "top"; //图片位置
         window.TagCanvas.textHeight = "10"; //字体高度
         window.TagCanvas.splitWidth = "1"; //换行
