@@ -13,6 +13,7 @@
         class="arrow"
       />
       <div class="padding">{{msg}}</div>
+      <div class="padding">1 </div>
       <a-icon
         type="right"
         class="arrow"

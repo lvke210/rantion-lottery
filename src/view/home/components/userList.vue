@@ -185,7 +185,7 @@ export default {
         window.TagCanvas.minBrightness = 1; //后端亮度
         window.TagCanvas.dragControl = true; //鼠标拖动旋转
         window.TagCanvas.noSelect = true; //是否可以选中某一项
-        window.TagCanvas.initial = [0.02, 0.02]; //初始方向和速度
+        window.TagCanvas.initial = [0.02, 0.02]; //初始方向和速度1
         await window.TagCanvas.Start("myCanvas");
         window.TagCanvas.Update("myCanvas");
         this.reFreshUser();
