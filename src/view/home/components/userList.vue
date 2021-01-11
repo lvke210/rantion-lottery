@@ -121,7 +121,8 @@ export default {
         //转动的效果
 
         async startGame() {
-            // window.TagCanvas.Start("myCanvas");
+            window.TagCanvas.Resume("myCanvas");
+            window.TagCanvas.SetSpeed("myCanvas", [0.1, 0.1]);
             await setTimeout(() => {
                 window.TagCanvas.SetSpeed("myCanvas", [0.2, 0.2]);
                 window.TagCanvas.zoom = 2;
@@ -158,7 +159,12 @@ export default {
         //     window.TagCanvas.Update("myCanvas");
         // }, 20000);
         reFreshList() {
+            //更新展示列表
             window.TagCanvas.Update("myCanvas");
+        },
+        stopTurning() {
+            //停止转动
+            window.TagCanvas.Pause("myCanvas");
         },
         canvasWidthChange() {
             let clientWidth = document.body.clientWidth; //屏幕宽度变化的话  展示的参与列表球体也变化

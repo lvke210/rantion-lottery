@@ -218,6 +218,7 @@ export default {
         async lotteryStop() {
             //抽奖按钮
             //停止转动 请求展示中奖名单
+            this.$refs.UserList.stopTurning();
             this.btnInnerText = "开始";
             this.not_winners = this.not_winners - this.rewordCount; //剩余奖品数量
             await giftRoll(this.curGift.id, this.rewordCount); //抽奖
