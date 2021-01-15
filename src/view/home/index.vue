@@ -148,6 +148,7 @@ export default {
     methods: {
         showWinner() {
             //判断该奖品是否还可以抽奖，
+            this.$refs.UserList.startTurning();
             this.btnInnerText = "开始";
             if (this.curGift.status == 1) {
                 this.successful = false;
@@ -248,13 +249,12 @@ export default {
 .title {
     font-size: 50px;
     color: #fff;
+    text-shadow: 2px 2px 2px #1890ff;
 }
 .center {
     margin-top: 50px;
 }
-.center2 {
-    margin-top: 50px;
-}
+
 .left {
     width: 20%;
     text-align: center;
@@ -273,6 +273,7 @@ export default {
     height: 47px;
     font-size: 22px;
     background-image: url("../../assets/btn.png");
+    border: none;
 }
 .right {
     flex: 1;
