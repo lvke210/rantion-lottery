@@ -23,20 +23,21 @@
               class='canvas'
             >
               <p>Anything in here will be replaced on browsers that support the canvas element</p>
-
+              <!-- :src='item.avatar !=="" ? item.avatar:default_url' -->
               <ul>
                 <li
                   v-for="item in list"
                   :key='item.id'
-                ><a>
+                >
+                  <a>
                     <img
-                      :src='item.avatar !=="" ? item.avatar:default_url'
-                      width="40px"
-                      height="40px"
-                      borderRadius='10px'
+                      :src='default_url'
+                      width="10px"
+                      height="10px"
                     >
                     <div>{{item.dept_name}}</div>
                     <div>{{item.user_name}}</div>
+
                   </a></li>
               </ul>
             </canvas>
@@ -58,13 +59,13 @@
           v-for="item in x"
           :key='item.index'
           class="item"
-        ><a>
+        >
+          <a>
             <img
-              :src='item.employee.avatar !=="" ? item.employee.avatar:default_url'
+              :src='default_url'
               shape="square"
               icon="user"
-              width="150px"
-              borderRadius='10px'
+              class="boll"
             />
           </a>
           <div>{{item.employee.dept_name}}</div>
@@ -107,7 +108,7 @@ export default {
     },
     data: function() {
         return {
-            default_url: "https://i.loli.net/2021/01/08/fgI9vPKmwunqJF3.png",
+            default_url: "https://i.loli.net/2021/01/20/vCY9cIF3umDJGEB.png",
             historyPrize: [],
             timer: "",
             rewordCount: 0, //获奖人数
@@ -185,10 +186,10 @@ export default {
         // window.TagCanvas.maxSpeed = 0.01;
         window.TagCanvas.imageMode = "both"; //图片和文字1
         window.TagCanvas.imagePosition = "top"; //图片位置
-        window.TagCanvas.textHeight = "10"; //字体高度
+        window.TagCanvas.textHeight = "15"; //字体高度
         window.TagCanvas.splitWidth = "1"; //换行
         // window.TagCanvas.clickToFront = "3";
-        window.TagCanvas.imageRadius = "20%";
+        window.TagCanvas.imageRadius = "50%";
         window.TagCanvas.zoom = 1.2; //大小
         window.TagCanvas.maxBrightness = 1; //前端亮度
         window.TagCanvas.minBrightness = 1; //后端亮度
@@ -230,7 +231,8 @@ export default {
 }
 .item {
     margin: 18px;
-    font-size: 20px;
+    font-size: 50px;
+    width: 218px;
 }
 .item div {
     white-space: nowrap;
@@ -251,6 +253,10 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
+}
+.boll {
+    border-radius: 50%;
+    width: 30px;
 }
 </style>
 

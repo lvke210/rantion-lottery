@@ -62,15 +62,9 @@
           <a-button
             id="focus"
             type='primary'
-            :disabled='disabled'
             class="startBtn"
             @click="lotteryStartStop"
           >{{btnInnerText}}</a-button>
-          <!-- <a-button
-            type='primary'
-            @click="lotteryStop"
-            :disabled='disabled'
-          >停止</a-button> -->
           <div>剩余奖品数量{{not_winners}}</div>
         </a-space>
       </a-card>
@@ -118,7 +112,7 @@ export default {
             not_winners: 0, //剩余奖品数量
             list: [], //参与成员列表
             list2: [], //中奖名单列表
-            rewordCount: 1,
+            rewordCount: 1, //本轮抽奖个数
             winners: 0,
             canvasWidth: "",
         };
@@ -143,6 +137,7 @@ export default {
         bus.$on("sendByBus", (count) => {
             this.rewordCount = count;
         });
+        this.$message.info("F11全屏");
     },
 
     methods: {
@@ -198,33 +193,39 @@ export default {
             this.showWinner();
         },
         lotteryStartStop() {
+            if (this.rewordCount == 0) {
+                this.$message.info("抽奖数不能为0");
+                return false;
+            }
             if (this.btnInnerText == "开始") {
                 this.lotteryStart();
-                console.log("====> 开始");
             } else {
                 this.lotteryStop();
-                console.log("====> 停止");
             }
         },
         async lotteryStart() {
             //开始按钮 只有加速效果
             if (this.not_winners < this.rewordCount) {
-                this.$message.info("剩余奖品数量不足");
+                this.$message.info("剩余奖品数量不足啦");
                 return false;
             }
             this.btnInnerText = "停止";
             this.successful = false;
             this.$refs.UserList.startGame();
+            console.log("====> 开始");
         },
         async lotteryStop() {
             //抽奖按钮
             //停止转动 请求展示中奖名单
+
             this.$refs.UserList.stopTurning();
             this.btnInnerText = "开始";
             this.not_winners = this.not_winners - this.rewordCount; //剩余奖品数量
+            console.log(this.rewordCount, "抽奖个数");
             await giftRoll(this.curGift.id, this.rewordCount); //抽奖
             const { data } = await getGift(this.curGift.id);
             this.list2 = data.gift_records;
+            console.log("====> 停止");
             if (this.not_winners <= 0) {
                 this.disabled = true;
             }
