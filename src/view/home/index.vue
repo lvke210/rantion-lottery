@@ -5,7 +5,7 @@
       <a-card style="height:93vh">
         <a-space
           direction="vertical"
-          :size='30'
+          :size='100'
           :class="center.value"
         >
           <!-- :class="`${this.$refs.UserList.canvasWidth>2000? '':'center'}`" -->
@@ -15,7 +15,8 @@
               alt=""
             ></div>
           <div>
-            <div class="title">年会抽奖</div>
+            <!-- <div class="title">年会抽奖</div> -->
+            <div class="title">春茗红包会</div>
           </div>
           <div>
             <div>
@@ -37,12 +38,13 @@
             </div>
             <!-- 奖品图片预览 -->
             <img
+              v-show='false'
               class="img"
               :src="gift_url"
               alt="奖品图片"
             >
             <!-- 奖品 -->
-            <div>
+            <div v-show='false'>
               <a-select
                 id="gift"
                 style="min-width:120px"
@@ -64,7 +66,8 @@
             type='primary'
             class="startBtn"
           >{{btnInnerText}}</a-button>
-          <div>剩余奖品数量{{not_winners}}</div>
+          <!-- <div>剩余奖品数量{{not_winners}}</div> -->
+          <div>剩余红包数量{{not_winners}}</div>
         </a-space>
       </a-card>
     </div>
@@ -121,6 +124,7 @@ export default {
     async mounted() {
         const { data } = await getPrize(); //获取奖项
         this.prizeData = data;
+        this.list2 = this.prizeData[0].gifts[0].gift_records; //已中奖列表
         this.defaultPrize = this.prizeData[0].id; //初始页面默认特等奖 奖品 图片
         this.defaultGift = this.prizeData[0].gifts[0].name;
         this.gift_url = this.prizeData[0].gifts[0].images;
@@ -138,9 +142,10 @@ export default {
             "keyup",
             debounce(
                 (e) => {
+                    console.log("按了", e.keyCode);
                     e.keyCode == 32 || e.keyCode == 13 ? this.lotteryStartStop() : "";
                 },
-                1000,
+                500,
                 true
             )
         );
@@ -176,7 +181,8 @@ export default {
             });
             this.prizeId = value;
             this.defaultPrize = value;
-            this.gift = this.prizeData[value - 1].gifts;
+            // this.gift = this.prizeData[value - 1].gifts;
+            this.gift = this.prizeData[value - 6].gifts;
             this.defaultGift = this.gift[0].name;
             this.giftId = this.gift[0].id;
             const { data } = await getGift(this.giftId);
@@ -252,7 +258,9 @@ export default {
     padding: 30px;
     user-select: none;
     /* background-image: url("./assets/bgc.jpg"); */
-    background-image: url("../../assets/bgc.png");
+    /* background-image: url("../../assets/bgc.png"); */
+    background-image: url("../../assets/bgcred.jpg");
+
     background-size: cover;
     background-position: center;
     overflow-x: auto;
@@ -260,7 +268,7 @@ export default {
 .title {
     font-size: 50px;
     color: #fff;
-    text-shadow: 2px 2px 2px #1890ff;
+    text-shadow: 1px 1px 1px yellow;
 }
 .center {
     margin-top: 50px;
@@ -283,7 +291,8 @@ export default {
     width: 140px;
     height: 47px;
     font-size: 22px;
-    background-image: url("../../assets/btn.png");
+    /* background-image: url("../../assets/btn.png"); */
+    background-color: #e08888;
     border: none;
 }
 .right {
@@ -302,7 +311,8 @@ export default {
 }
 .ant-select-selection-selected-value {
     color: #fff;
-    font-size: 20px;
+    font-size: 50px;
+    overflow: initial;
 }
 .ant-select-dropdown-menu-item:hover:not(.ant-select-dropdown-menu-item-disabled) {
     background-color: #1890ff;
@@ -330,5 +340,12 @@ export default {
 .ant-select-selection--single .ant-select-selection__rendered {
     margin-right: 10px;
     margin-top: 20px;
+}
+.ant-select-selection,
+.ant-select-selection--single {
+    position: relative;
+    height: 32px;
+    width: 260px;
+    cursor: pointer;
 }
 </style>

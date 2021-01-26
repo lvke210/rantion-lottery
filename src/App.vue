@@ -16,6 +16,6 @@ export default {
 <style>
 #app {
     font-weight: 700;
-    text-shadow: 2px 2px 2px #1890ff;
+    text-shadow: 1px 1px 1px yellow;
 }
 </style>

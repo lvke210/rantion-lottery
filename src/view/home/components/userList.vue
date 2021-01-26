@@ -62,6 +62,7 @@
         >
           <a>
             <img
+              v-show="false"
               :src='default_url'
               shape="square"
               icon="user"
@@ -108,7 +109,8 @@ export default {
     },
     data: function() {
         return {
-            default_url: "https://i.loli.net/2021/01/20/vCY9cIF3umDJGEB.png",
+            // default_url: "https://i.loli.net/2021/01/20/vCY9cIF3umDJGEB.png",
+            default_url: "https://i.loli.net/2021/01/26/IMJp1WfuCdmk7et.png",
             historyPrize: [],
             timer: "",
             rewordCount: 0, //获奖人数
@@ -230,8 +232,8 @@ export default {
     color: #fff;
 }
 .item {
-    margin: 18px;
-    font-size: 50px;
+    margin: 60px 18px;
+    font-size: 30px;
     width: 218px;
 }
 .item div {
