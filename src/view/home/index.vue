@@ -63,7 +63,6 @@
             id="focus"
             type='primary'
             class="startBtn"
-            @click="lotteryStartStop"
           >{{btnInnerText}}</a-button>
           <div>剩余奖品数量{{not_winners}}</div>
         </a-space>
@@ -92,6 +91,8 @@ import Quantity from "./components/quantity";
 import UserList from "./components/userList";
 import { giftRoll, getGift, getPrize } from "../../api/index.js";
 import bus from "../../assets/js/eventBus";
+import { debounce } from "underscore";
+
 export default {
     name: "Home",
     components: { Quantity, UserList },
@@ -118,12 +119,6 @@ export default {
         };
     },
     async mounted() {
-        document.addEventListener("keyup", (e) => {
-            e.preventDefault();
-            if (e.keyCode == 32 || e.keyCode == 13) {
-                this.lotteryStartStop();
-            }
-        });
         const { data } = await getPrize(); //获取奖项
         this.prizeData = data;
         this.defaultPrize = this.prizeData[0].id; //初始页面默认特等奖 奖品 图片
@@ -138,6 +133,20 @@ export default {
             this.rewordCount = count;
         });
         this.$message.info("F11全屏");
+        //开始和停止按钮的防抖
+        document.addEventListener(
+            "keyup",
+            debounce(
+                (e) => {
+                    e.keyCode == 32 || e.keyCode == 13 ? this.lotteryStartStop() : "";
+                },
+                1000,
+                true
+            )
+        );
+        document
+            .querySelector("#focus")
+            .addEventListener("click", debounce(this.lotteryStartStop, 1000, true));
     },
 
     methods: {
@@ -203,6 +212,7 @@ export default {
                 this.lotteryStop();
             }
         },
+
         async lotteryStart() {
             //开始按钮 只有加速效果
             if (this.not_winners < this.rewordCount) {
