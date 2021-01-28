@@ -5,12 +5,12 @@
       <a-card style="height:93vh">
         <a-space
           direction="vertical"
-          :size='100'
+          :size="center.size"
           :class="center.value"
         >
           <!-- :class="`${this.$refs.UserList.canvasWidth>2000? '':'center'}`" -->
 
-          <div><img
+          <div class="logo"><img
               src="../../assets/logo2.png"
               alt=""
             ></div>
@@ -101,7 +101,7 @@ export default {
     components: { Quantity, UserList },
     data: function() {
         return {
-            center: { value: "center" },
+            center: { value: "center", size: 80 },
             btnInnerText: "开始", //按钮显示内容
             successful: false,
             disabled: false,
@@ -119,12 +119,17 @@ export default {
             rewordCount: 1, //本轮抽奖个数
             winners: 0,
             canvasWidth: "",
+            spaceSize: "",
+            spaceSize2: "",
         };
     },
+
     async mounted() {
+        console.log(document.body.clientHeight);
         const { data } = await getPrize(); //获取奖项
         this.prizeData = data;
         this.list2 = this.prizeData[0].gifts[0].gift_records; //已中奖列表
+        this.winners = this.prizeData[0].gifts[0].winners; //已中奖人数
         this.defaultPrize = this.prizeData[0].id; //初始页面默认特等奖 奖品 图片
         this.defaultGift = this.prizeData[0].gifts[0].name;
         this.gift_url = this.prizeData[0].gifts[0].images;
@@ -137,13 +142,15 @@ export default {
             this.rewordCount = count;
         });
         this.$message.info("F11全屏");
+
         //开始和停止按钮的防抖
+        document.querySelector("#focus").focus();
         document.addEventListener(
             "keyup",
             debounce(
                 (e) => {
-                    console.log("按了", e.keyCode);
-                    e.keyCode == 32 || e.keyCode == 13 ? this.lotteryStartStop() : "";
+                    console.log("按键");
+                    e.space || e.enter ? this.lotteryStartStop : "";
                 },
                 500,
                 true
@@ -208,11 +215,12 @@ export default {
             this.showWinner();
         },
         lotteryStartStop() {
+            console.log("lotteryStartStop");
             if (this.rewordCount == 0) {
                 this.$message.info("抽奖数不能为0");
                 return false;
             }
-            if (this.btnInnerText == "开始") {
+            if (this.btnInnerText === "开始") {
                 this.lotteryStart();
             } else {
                 this.lotteryStop();
@@ -235,18 +243,18 @@ export default {
             //停止转动 请求展示中奖名单
 
             this.$refs.UserList.stopTurning();
-            this.btnInnerText = "开始";
             this.not_winners = this.not_winners - this.rewordCount; //剩余奖品数量
             console.log(this.rewordCount, "抽奖个数");
             await giftRoll(this.curGift.id, this.rewordCount); //抽奖
             const { data } = await getGift(this.curGift.id);
             this.list2 = data.gift_records;
             console.log("====> 停止");
-            if (this.not_winners <= 0) {
-                this.disabled = true;
-            }
+            // if (this.not_winners <= 0) {
+            //     this.disabled = true;
+            // }
             this.successful = true;
             this.winners = data.winners;
+            this.btnInnerText = "开始";
         },
     },
 };
@@ -266,16 +274,13 @@ export default {
     overflow-x: auto;
 }
 .title {
-    font-size: 50px;
+    font-size: 2.8vw;
     color: #fff;
     text-shadow: 1px 1px 1px yellow;
 }
-.center {
-    margin-top: 50px;
-}
 
 .left {
-    width: 20%;
+    width: 370px;
     text-align: center;
     margin-right: 20px;
 }
@@ -311,7 +316,7 @@ export default {
 }
 .ant-select-selection-selected-value {
     color: #fff;
-    font-size: 50px;
+    font-size: 2.8vw;
     overflow: initial;
 }
 .ant-select-dropdown-menu-item:hover:not(.ant-select-dropdown-menu-item-disabled) {
@@ -347,5 +352,8 @@ export default {
     height: 32px;
     width: 260px;
     cursor: pointer;
+}
+.logo {
+    margin-top: 50px;
 }
 </style>

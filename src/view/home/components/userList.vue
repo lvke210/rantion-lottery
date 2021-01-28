@@ -77,6 +77,7 @@
       </div>
 
     </div>
+    <div class="mission">用心打造产品，让品牌深入人心</div>
   </div>
 </template>
 
@@ -259,6 +260,14 @@ export default {
 .boll {
     border-radius: 50%;
     width: 30px;
+}
+.mission {
+    color: #fff;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 25px;
+    font-weight: 100;
 }
 </style>
 
