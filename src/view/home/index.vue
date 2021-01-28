@@ -5,7 +5,7 @@
       <a-card style="height:93vh">
         <a-space
           direction="vertical"
-          :size="center.size"
+          :size="spaceSize"
           :class="center.value"
         >
           <!-- :class="`${this.$refs.UserList.canvasWidth>2000? '':'center'}`" -->
@@ -101,7 +101,7 @@ export default {
     components: { Quantity, UserList },
     data: function() {
         return {
-            center: { value: "center", size: 80 },
+            center: { value: "center" },
             btnInnerText: "开始", //按钮显示内容
             successful: false,
             disabled: false,
@@ -119,13 +119,14 @@ export default {
             rewordCount: 1, //本轮抽奖个数
             winners: 0,
             canvasWidth: "",
-            spaceSize: "",
-            spaceSize2: "",
+            spaceSize: 80,
         };
     },
 
     async mounted() {
-        console.log(document.body.clientHeight);
+        window.onresize = () => {
+            this.spaceSize = document.body.clientHeight / 12;
+        };
         const { data } = await getPrize(); //获取奖项
         this.prizeData = data;
         this.list2 = this.prizeData[0].gifts[0].gift_records; //已中奖列表
