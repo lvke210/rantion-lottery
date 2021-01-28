@@ -200,6 +200,7 @@ export default {
             this.not_winners = this.curGift.not_winners;
             this.winners = this.curGift.winners;
             this.showWinner();
+            document.querySelector("#focus").focus();
         },
         async handlegiftChange(value) {
             //奖品变化时执行
@@ -281,7 +282,7 @@ export default {
 }
 
 .left {
-    width: 370px;
+    width: 330px;
     text-align: center;
     margin-right: 20px;
 }

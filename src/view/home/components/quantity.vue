@@ -31,7 +31,7 @@ export default {
     props: { not_winners: Number },
     data: function() {
         return {
-            count: 1,
+            count: 10,
             notWin: this.not_winners,
         };
     },
