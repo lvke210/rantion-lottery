@@ -147,17 +147,17 @@ export default {
 
         //开始和停止按钮的防抖
         document.querySelector("#focus").focus();
-        document.addEventListener(
-            "keyup",
-            debounce(
-                (e) => {
-                    console.log("按键");
-                    e.space || e.enter ? this.lotteryStartStop : "";
-                },
-                500,
-                true
-            )
-        );
+        // document.addEventListener(
+        //     "keyup",
+        //     debounce(
+        //         (e) => {
+        //             console.log("按键");
+        //             e.space || e.enter ? this.lotteryStartStop : "";
+        //         },
+        //         500,
+        //         true
+        //     )
+        // );
         document
             .querySelector("#focus")
             .addEventListener("click", debounce(this.lotteryStartStop, 1000, true));
@@ -202,7 +202,7 @@ export default {
             this.not_winners = this.curGift.not_winners;
             this.winners = this.curGift.winners;
             //新增幸运红包时不显示剩余红包数量
-            console.log("haha", data.name);
+
             data.name === "幸运红包"
                 ? (this.showNot_winners = false)
                 : (this.showNot_winners = true);
@@ -224,7 +224,6 @@ export default {
             this.showWinner();
         },
         lotteryStartStop() {
-            console.log("lotteryStartStop");
             if (this.rewordCount == 0) {
                 this.$message.info("抽奖数不能为0");
                 return false;
