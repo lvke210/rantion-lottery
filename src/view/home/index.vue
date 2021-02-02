@@ -67,7 +67,7 @@
             class="startBtn"
           >{{btnInnerText}}</a-button>
           <!-- <div>剩余奖品数量{{not_winners}}</div> -->
-          <div>剩余红包数量{{not_winners}}</div>
+          <div v-show='showNot_winners'>剩余红包数量{{not_winners}}</div>
         </a-space>
       </a-card>
     </div>
@@ -114,6 +114,7 @@ export default {
             prizeId: 1, // 奖项的ID ，用于
             giftId: 1, //奖品的ID
             not_winners: 0, //剩余奖品数量
+            showNot_winners: true, //是否显示剩余奖品数量
             list: [], //参与成员列表
             list2: [], //中奖名单列表
             rewordCount: 10, //本轮抽奖个数
@@ -183,6 +184,7 @@ export default {
         },
         async handleprizeChange(value) {
             //奖项变化时执行
+
             document.querySelector("#prize").blur();
             this.$nextTick(() => {
                 this.$refs.UserList.orSpeed();
@@ -199,6 +201,11 @@ export default {
             this.gift_url = this.curGift.images;
             this.not_winners = this.curGift.not_winners;
             this.winners = this.curGift.winners;
+            //新增幸运红包时不显示剩余红包数量
+            console.log("haha", data.name);
+            data.name === "幸运红包"
+                ? (this.showNot_winners = false)
+                : (this.showNot_winners = true);
             this.showWinner();
             document.querySelector("#focus").focus();
         },
