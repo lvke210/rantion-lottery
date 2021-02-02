@@ -234,8 +234,8 @@ export default {
 }
 .item {
     margin: 60px 18px;
-    font-size: 30px;
-    width: 218px;
+    font-size: 25px;
+    width: 15%;
 }
 .item div {
     white-space: nowrap;

@@ -116,7 +116,7 @@ export default {
             not_winners: 0, //剩余奖品数量
             list: [], //参与成员列表
             list2: [], //中奖名单列表
-            rewordCount: 1, //本轮抽奖个数
+            rewordCount: 10, //本轮抽奖个数
             winners: 0,
             canvasWidth: "",
             spaceSize: 80,
@@ -278,7 +278,7 @@ export default {
 .title {
     font-size: 2.8vw;
     color: #fff;
-    text-shadow: 1px 1px 1px yellow;
+    /* text-shadow: 1px 1px 1px yellow; */
 }
 
 .left {
