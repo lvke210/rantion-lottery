@@ -178,12 +178,9 @@ export default {
             clientWidth > 2000
                 ? ((this.canvasWidth = 3000), this.$set(this.center, "value", ""))
                 : ((this.canvasWidth = 1400), this.$set(this.center, "value", "center"));
-            let clientheight = document.body.clientHeight;
-            clientheight > 900 ? (this.canvasWidth = 1400) : (this.canvasWidth = 1800);
         },
     },
     async mounted() {
-        console.log(document.body.clientHeight);
         this.canvasWidthChange();
         const { data } = await getSignList();
         this.list = data.data;
