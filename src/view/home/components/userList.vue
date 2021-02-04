@@ -233,8 +233,8 @@ export default {
     color: #fff;
 }
 .item {
-    margin: 60px 18px;
-    font-size: 25px;
+    margin: 58px 17px;
+    font-size: 20px;
     width: 15%;
 }
 .item div {
@@ -248,7 +248,8 @@ export default {
 }
 .canvas {
     width: 100%;
-    height: 95%;
+    height: 98%;
+    margin-top: 15px;
     font-size: 12px;
 }
 .custom-head {
