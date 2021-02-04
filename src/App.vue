@@ -15,6 +15,8 @@ export default {
 
 <style>
 #app {
+    height: 100%;
+
     font-weight: 700;
     /* text-shadow: 1px 1px 1px yellow; */
 }
